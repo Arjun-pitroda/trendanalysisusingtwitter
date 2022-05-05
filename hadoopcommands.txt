@@ -1,0 +1,3 @@
+$HADOOP_HOME/sbin/start-dfs.sh
+$HADOOP_HOME/sbin/start-dfs.sh
+$hadoop fs -mkdir /miniproject_twitter_data
