@@ -1,0 +1,1 @@
+Flume-ng agent –conf /etc/flume-ng/conf/ -f /home/arjun/apache-flume-1.9.0-bin/conf/twitter.conf -Dflume.root.logger=Debug,console -n TwitterAgent -Xmx525m
