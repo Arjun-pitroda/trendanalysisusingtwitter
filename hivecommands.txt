@@ -1,0 +1,17 @@
+$hive
+hive>Add jar /yourpathtojarfile/hive-catalog-core-3.1.3.jar;
+
+hive> CREATE EXTERNAL TABLE tweets ( id BIGINT, created_at STRING, source STRING, favorited BOOLEAN, retweeted_status STRUCT< text : STRING, `user` :STRUCT<screen_name : STRING,name : STRING>, retweet_count : INT>, entities STRUCT< urls : ARRAY<STRUCT<expanded_url : STRING>>, user_mentions : ARRAY<STRUCT<screen_name : STRING,name : STRING>>, hashtags : ARRAY<STRUCT<text : STRING>>>, text STRING, `user` STRUCT< screen_name : STRING, name : STRING, friends_count : INT, followers_count : INT, statuses_count : INT, verified : BOOLEAN, utc_offset : INT, time_zone : STRING>, in_reply_to_screen_name STRING ) ROW FORMAT SERDE 'org.apache.hive.hcatalog.data.JsonSerDe' LOCATION '/miniproject2';
+
+hive>SELECT t.retweeted_screen_name,
+sum(retweets) AS total_retweets,
+count(*) AS tweet_count FROM
+( SELECT retweeted_status.`user`.screen_name as retweeted_screen_name, retweeted_status.text,
+max(retweeted_status.retweet_count) as retweets
+FROM tweets
+GROUP BY
+retweeted_status.`user`.screen_name,
+retweeted_status.text) t
+GROUP BY t.retweeted_screen_name
+ORDER BY total_retweets DESC
+LIMIT 10;
